@@ -24,7 +24,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="exposhoppingapp"/>
+        <data android:scheme="coryshoppingapp"/>
         <data android:scheme="exp+expo-shoppingapp"/>
       </intent-filter>
     </activity>

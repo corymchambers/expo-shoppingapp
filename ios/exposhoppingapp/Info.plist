@@ -27,7 +27,7 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>exposhoppingapp</string>
+          <string>coryshoppingapp</string>
           <string>com.anonymous.expo-shoppingapp</string>
         </array>
       </dict>

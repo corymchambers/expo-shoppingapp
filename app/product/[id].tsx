@@ -41,15 +41,15 @@ const Page = () => {
   };
 
   const onShare = async () => {
-    const url = `galaxiesshop://product/${product.id}`;
+    const url = `coryshoppingapp://product/${product.id}`;
     if (Platform.OS === 'ios') {
       await Share.share({
         url,
-        message: `Check out this product on Galaxies Shop: ${url}`,
+        message: `Check out this product on Cory's Shop: ${url}`,
       });
     } else {
       await Share.share({
-        message: `Check out this product on Galaxies Shop: ${url}`,
+        message: url,
       });
     }
   };
