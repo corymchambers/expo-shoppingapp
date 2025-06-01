@@ -1,4 +1,5 @@
 import { ProductDetailsShimmer } from '@/components/ProductDetailsShimmer';
+import useCartStore from '@/store/cartStore';
 import { getProduct } from '@/utils/api';
 import { COLORS } from '@/utils/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -19,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const Page = () => {
   const { id } = useLocalSearchParams();
   const { bottom } = useSafeAreaInsets();
+  const { addProduct } = useCartStore();
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id],
@@ -35,6 +37,7 @@ const Page = () => {
 
   const handleAddToCart = () => {
     console.log('add to cart');
+    addProduct(product);
   };
 
   const onShare = async () => {

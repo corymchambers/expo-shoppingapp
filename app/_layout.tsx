@@ -1,3 +1,4 @@
+import CartButton from '@/components/CartButton';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 
@@ -16,8 +17,14 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: 'products',
+            title: 'Galactic Products',
             headerShadowVisible: false,
+            headerSearchBarOptions: {
+              placeholder: 'Search products..',
+              hideWhenScrolling: false,
+              hideNavigationBar: false,
+            },
+            headerRight: () => <CartButton />,
           }}
         />
         <Stack.Screen
