@@ -1,4 +1,5 @@
 import ProductCard from '@/components/ProductCard';
+import { ProductShimmerGrid } from '@/components/ProductListShimmer';
 import { getCategories, getProducts } from '@/utils/api';
 import { COLORS } from '@/utils/colors';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -6,7 +7,14 @@ import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 interface Product {
   id: number;
@@ -26,7 +34,6 @@ export default function Index() {
     isLoading,
     refetch,
     isRefetching,
-    error,
   } = useQuery({
     queryKey: ['products'],
     queryFn: getProducts,
@@ -50,66 +57,62 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={[styles.container, { marginTop: Platform.select({ ios: headerHeight + 30, android: 0 }) }]}>
-      {isLoading ? (
-        <View style={styles.centerContainer}>
-          <Text>Loading products...</Text>
-        </View>
-      ) : error ? (
-        <View style={styles.centerContainer}>
-          <Text>Error loading products: {error.message}</Text>
-        </View>
-      ) : (
-        <>
-          <Stack.Screen
-            options={{
-              headerSearchBarOptions: {
-                placeholder: 'Search products',
-                hideWhenScrolling: false,
-                hideNavigationBar: false,
-                onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
-              },
-            }}
-          />
-          <View style={styles.categoryContainer}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.categoryScroll}
+    <View
+      style={[
+        styles.container,
+        { marginTop: Platform.select({ ios: headerHeight + 30, android: 0 }) },
+      ]}
+    >
+      <Stack.Screen
+        options={{
+          headerSearchBarOptions: {
+            placeholder: 'Search products',
+            hideWhenScrolling: false,
+            hideNavigationBar: false,
+            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+          },
+        }}
+      />
+      <View style={styles.categoryContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.categoryScroll}
+        >
+          {allCategories.map((category) => (
+            <Pressable
+              key={category}
+              style={[
+                styles.categoryButton,
+                selectedCategory === category && styles.selectedCategory,
+              ]}
+              onPress={() => setSelectedCategory(category)}
             >
-              {allCategories.map((category) => (
-                <Pressable
-                  key={category}
-                  style={[
-                    styles.categoryButton,
-                    selectedCategory === category && styles.selectedCategory,
-                  ]}
-                  onPress={() => setSelectedCategory(category)}
-                >
-                  <Text
-                    style={[
-                      styles.categoryText,
-                      selectedCategory === category &&
-                        styles.selectedCategoryText,
-                    ]}
-                  >
-                    {category}
-                  </Text>
-                </Pressable>
-              ))}
-            </ScrollView>
-          </View>
-          <FlashList
-            data={filteredProducts}
-            renderItem={renderProduct}
-            estimatedItemSize={200}
-            numColumns={2}
-            contentContainerStyle={styles.contentContainer}
-            keyExtractor={(item) => item.id.toString()}
-            onRefresh={refetch}
-            refreshing={isRefetching}
-          />
-        </>
+              <Text
+                style={[
+                  styles.categoryText,
+                  selectedCategory === category && styles.selectedCategoryText,
+                ]}
+              >
+                {category}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
+      {isLoading ? (
+        <ProductShimmerGrid />
+      ) : (
+        <FlashList
+          data={filteredProducts}
+          renderItem={renderProduct}
+          estimatedItemSize={200}
+          numColumns={2}
+          contentContainerStyle={styles.contentContainer}
+          keyExtractor={(item) => item.id.toString()}
+          onRefresh={refetch}
+          refreshing={isRefetching}
+        />
       )}
     </View>
   );
